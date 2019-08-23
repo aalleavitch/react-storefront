@@ -570,10 +570,21 @@ export default class Router extends EventEmitter {
     history.replace(`${history.location.pathname}?${nextParams}`)
   }
 
-  createEdgeCacheConfiguration() {
+  createEdgeConfiguration() {
     const customCacheKeys = []
+    const routes = []
 
     for (let route of this.routes) {
+      const routingHandler = route.handlers.find(
+        handler => handler.type === 'fromOrigin' || handler.type === 'redirectTo'
+      )
+      if (routingHandler) {
+        routes.push({
+          path: this.routeToRegex(route).source,
+          ...routingHandler.props
+        })
+      }
+
       const cache = route.handlers.find(handler => handler.type === 'cache')
       if (!cache || !cache.edge || !cache.edge.key) continue
       customCacheKeys.push({
@@ -583,7 +594,8 @@ export default class Router extends EventEmitter {
     }
 
     return {
-      custom_cache_keys: customCacheKeys
+      custom_cache_keys: customCacheKeys,
+      router: routes
     }
   }
 
