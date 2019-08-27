@@ -841,7 +841,7 @@ describe('Router:Node', function() {
     describe('edge proxy configuration', () => {
       it('should proxy to given origin', () => {
         const router = new Router().get('/foo', fromOrigin('desktop'))
-        expect(router.createEdgeConfiguration().router).toContainEqual({
+        expect(router.createEdgeConfiguration().router[2]).toEqual({
           path: '^\\/foo(?=\\?|$)',
           proxy: {
             backend: 'desktop'
@@ -851,9 +851,9 @@ describe('Router:Node', function() {
       it('should proxy to given origin with transformed path', () => {
         const router = new Router().get(
           '/foo/:cat/:id',
-          fromOrigin('desktop').transformPath('/bar/${cat}/${id}')
+          fromOrigin('desktop').transformPath('/bar/{cat}/{id}')
         )
-        expect(router.createEdgeConfiguration().router).toContainEqual({
+        expect(router.createEdgeConfiguration().router[2]).toEqual({
           path: '^\\/foo\\/([^\\/\\?]+)\\/([^\\/\\?]+)(?=\\?|$)',
           proxy: {
             backend: 'desktop',
@@ -863,7 +863,7 @@ describe('Router:Node', function() {
       })
       it('should redirect with status', () => {
         const router = new Router().get('/foo', redirectTo('/bar').withStatus(302))
-        expect(router.createEdgeConfiguration().router).toContainEqual({
+        expect(router.createEdgeConfiguration().router[2]).toEqual({
           path: '^\\/foo(?=\\?|$)',
           redirect: {
             status: 302,
@@ -872,12 +872,38 @@ describe('Router:Node', function() {
         })
       })
       it('should redirect with status and path transformation', () => {
-        const router = new Router().get('/foo/*path', redirectTo('/bar/${path}').withStatus(200))
-        expect(router.createEdgeConfiguration().router).toContainEqual({
+        const router = new Router().get('/foo/*path', redirectTo('/bar/{path}').withStatus(200))
+        expect(router.createEdgeConfiguration().router[2]).toEqual({
           path: '^\\/foo\\/([^?]*?)(?=\\?|$)',
           redirect: {
             status: 200,
             rewrite_path_regex: '/bar/\\1'
+          }
+        })
+      })
+      it('should transformed path with multiple uses of variable', () => {
+        const router = new Router().get(
+          '/foo/:x/:y',
+          fromOrigin('desktop').transformPath('/bar/{x}/{y}/{x}')
+        )
+        expect(router.createEdgeConfiguration().router[2]).toEqual({
+          path: '^\\/foo\\/([^\\/\\?]+)\\/([^\\/\\?]+)(?=\\?|$)',
+          proxy: {
+            backend: 'desktop',
+            rewrite_path_regex: '/bar/\\1/\\2/\\1'
+          }
+        })
+      })
+      it('should leave escaped paths alone', () => {
+        const router = new Router().get(
+          '/foo/:x',
+          fromOrigin('desktop').transformPath('/bar/\\{x}/{x}')
+        )
+        expect(router.createEdgeConfiguration().router[2]).toEqual({
+          path: '^\\/foo\\/([^\\/\\?]+)(?=\\?|$)',
+          proxy: {
+            backend: 'desktop',
+            rewrite_path_regex: '/bar/\\{x}/\\1'
           }
         })
       })

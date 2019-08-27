@@ -7,17 +7,22 @@ import transformParams from './transformParams'
 
 export default function fromOrigin(backend) {
   const type = 'fromOrigin'
-  const props = {
+  const config = {
     proxy: {
       backend
     }
   }
   return {
     type,
-    props,
+    config: () => config,
     transformPath: path => {
-      props.proxy.rewrite_path_regex = transformParams(path)
-      return { type, props }
+      return {
+        type,
+        config: routePath => {
+          config.proxy.rewrite_path_regex = transformParams(routePath, path)
+          return config
+        }
+      }
     }
   }
 }

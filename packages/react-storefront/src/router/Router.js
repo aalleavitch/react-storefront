@@ -581,7 +581,7 @@ export default class Router extends EventEmitter {
       if (routingHandler) {
         routes.push({
           path: this.routeToRegex(route).source,
-          ...routingHandler.props
+          ...routingHandler.config(route.path)
         })
       }
 

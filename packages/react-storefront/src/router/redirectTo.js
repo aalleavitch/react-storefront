@@ -7,17 +7,17 @@ import transformParams from './transformParams'
 
 export default function redirectTo(path) {
   const type = 'redirectTo'
-  const props = {
+  const config = (routePath, status) => ({
     redirect: {
-      rewrite_path_regex: transformParams(path)
+      rewrite_path_regex: transformParams(routePath, path),
+      ...(status ? { status } : {})
     }
-  }
+  })
   return {
     type,
-    props,
+    config,
     withStatus: status => {
-      props.redirect.status = status
-      return { type, props }
+      return { type, config: routePath => config(routePath, status) }
     }
   }
 }
