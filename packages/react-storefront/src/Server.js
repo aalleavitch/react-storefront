@@ -165,6 +165,13 @@ export default class Server {
       })
 
       const helmet = Helmet.renderStatic()
+
+      const htmlProps = Object.keys(helmet.htmlAttributes.toComponent())
+
+      if (amp && !htmlProps.includes('with-amp')) {
+        response.status(302)
+      }
+
       const chunks = flushChunkNames(stats)
 
       const scripts = flattenDeep([
