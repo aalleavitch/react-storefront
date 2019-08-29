@@ -74,6 +74,11 @@ yarn release
 
 ## Changelog
 
+### 6.44.0
+
+- Added `react-storefront/requestContext` for request scoped state storage access
+- Added checks for AMP requests without @withAmp usage or AMP transformation
+
 ### 6.43.1
 
 - Prevent errors when headers forwarded by fetch are not provided by the browser.

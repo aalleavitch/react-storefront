@@ -1,3 +1,7 @@
+/**
+ * @license
+ * Copyright © 2017-2019 Moov Corporation.  All rights reserved.
+ */
 // import { setImplementation } from 'react-storefront/requestContext'
 import { setImplementation } from '../../react-storefront/src/requestContext'
 
