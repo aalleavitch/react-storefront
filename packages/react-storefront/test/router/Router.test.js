@@ -907,13 +907,21 @@ describe('Router:Node', function() {
           '/foo/:x',
           fromOrigin('desktop').transformPath('/bar/\\{x}/{x}')
         )
-        expect(router.createEdgeConfiguration().router[2]).toEqual({
+        const config = router.createEdgeConfiguration().router[2]
+        expect(config).toEqual({
           path: '^\\/foo\\/([^\\/\\?]+)(?=\\?|$)',
           proxy: {
             backend: 'desktop',
             rewrite_path_regex: '/bar/\\{x}/\\1'
           }
         })
+        // Test regex replacement
+        expect(
+          '/foo/a'.replace(
+            new RegExp(config.path),
+            config.proxy.rewrite_path_regex.replace(/\\\d/g, '$$1')
+          )
+        ).toEqual('/bar/\\{x}/a')
       })
       it('should handle variable at beginning of path', () => {
         const router = new Router().get('/foo/:x', fromOrigin('desktop').transformPath('{x}/bar'))
