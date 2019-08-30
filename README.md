@@ -77,7 +77,7 @@ yarn release
 ### 6.44.0
 
 - Added `react-storefront/requestContext` for request scoped state storage access
-- Added checks for AMP requests without @withAmp usage or AMP transformation
+- Redirects from AMP to the PWA if @withAmp is not present on the main page component or if react-storefront-extensions/transformAmpHtml is not used.
 
 ### 6.43.1
 
