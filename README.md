@@ -79,6 +79,10 @@ yarn release
 - Added `react-storefront/requestContext` for request scoped state storage access
 - Redirects from AMP to the PWA if @withAmp is not present on the main page component or if react-storefront-extensions/transformAmpHtml is not used.
 
+### 6.43.2
+
+- Fixed a client build issue relating to AMP exclusion.
+
 ### 6.43.1
 
 - Prevent errors when headers forwarded by fetch are not provided by the browser.
