@@ -284,7 +284,7 @@ export const SuggestedSearch = props => (
     <ul className={props.classes.suggestionsList}>
       {props.searches.map((item, i) => (
         <li key={i}>
-          <Track event="searchLinkClicked" term={item.text}>
+          <Track event="searchSubmitted" term={item.text}>
             <Link to={`/search?text=${item.text}`} onClick={props.hidePopup}>
               <Highlight search={props.searchText}>{item.text}</Highlight>
             </Link>
@@ -318,7 +318,7 @@ export const CategorySearches = props => (
     <ul className={props.classes.suggestionsList}>
       {props.categories.map(item => (
         <li key={item.id}>
-          <Track event="searchLinkClicked" term={item.name}>
+          <Track event="searchSubmitted" term={item.name}>
             <Link to={item.url} onClick={props.hidePopup}>
               {item.name}
             </Link>
@@ -353,12 +353,12 @@ export const ProductSuggestions = props => (
     <ul className={props.classes.productsSuggestions}>
       {props.products.map(item => (
         <li key={item.id}>
-          <Track event="searchLinkClicked" term={item.name}>
+          <Track event="searchSubmitted" term={item.name}>
             <Link to={item.url} onClick={props.hidePopup} className={props.classes.productImage}>
               <Image fill src={item.thumbnail} alt={item.name} />
             </Link>
           </Track>
-          <Track event="searchLinkClicked" term={item.name}>
+          <Track event="searchSubmitted" term={item.name}>
             <Link to={item.url} onClick={props.hidePopup}>
               {item.name}
             </Link>
