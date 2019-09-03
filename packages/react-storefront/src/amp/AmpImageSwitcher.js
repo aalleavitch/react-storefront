@@ -122,7 +122,7 @@ export default class AmpImageSwitcher extends Component {
     type: 'slides',
     indicators: false,
     ampStateProperty: 'selectedImage',
-    controls: false
+    arrows: false
   }
 
   constructor({ id, nextId }) {
@@ -181,7 +181,7 @@ export default class AmpImageSwitcher extends Component {
             single-item
             items="."
           >
-            <template type="amp-mustache" specName="default">
+            <template type="amp-mustache">
               <amp-carousel
                 controls={arrows ? true : undefined}
                 id={id}
@@ -189,14 +189,13 @@ export default class AmpImageSwitcher extends Component {
                 type={type}
                 amp-bind={`slide=>${ampStateId}.${ampStateProperty}`}
                 on={`slideChange:AMP.setState({ ${ampStateId}: { ${ampStateProperty}: event.index } })`}
-              >
-                {`
-                  {{#images}}
-                    <amp-img lightbox src="{{.}}" layout="fill" alt="alt" />
-                  {{/images}}
-                `}
-                />
-              </amp-carousel>
+                dangerouslySetInnerHTML={{
+                  __html: `
+                {{#images}}
+                  <amp-img lightbox src="{{.}}" layout="fill" alt="alt"/>
+                {{/images}}`
+                }}
+              />
             </template>
           </amp-list>
 
