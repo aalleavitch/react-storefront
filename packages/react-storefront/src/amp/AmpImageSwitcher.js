@@ -178,8 +178,8 @@ export default class AmpImageSwitcher extends Component {
             id="list"
             src={`${pathname}/images/cccccc.json`}
             amp-bind={`src=>'${pathname}/images/' + moovAmpState.color.selected.id + '.json'`}
+            items="amp"
             single-item
-            items="."
           >
             <template type="amp-mustache">
               <amp-carousel
@@ -187,13 +187,14 @@ export default class AmpImageSwitcher extends Component {
                 id={id}
                 layout="fill"
                 type={type}
+                loop
                 amp-bind={`slide=>${ampStateId}.${ampStateProperty}`}
                 on={`slideChange:AMP.setState({ ${ampStateId}: { ${ampStateProperty}: event.index } })`}
                 dangerouslySetInnerHTML={{
                   __html: `
-                {{#images}}
-                  <amp-img lightbox src="{{.}}" layout="fill" alt="alt"/>
-                {{/images}}`
+                {{#items}}
+                  <amp-img lightbox src="{{src}}" layout="fill" alt="{{alt}}"></amp-img>
+                {{/items}}`
                 }}
               />
             </template>
@@ -230,9 +231,18 @@ export default class AmpImageSwitcher extends Component {
                     amp-bind={`class=>${ampStateId}.${ampStateProperty} == ${i} ? '${
                       classes.thumbnail
                     } ${classes.thumbnailSelected}' : '${classes.thumbnail}'`}
-                    class={classnames(classes.thumbnail, { [classes.thumbnailSelected]: i === 0 })}
+                    class={classnames(classes.thumbnail, {
+                      [classes.thumbnailSelected]: i === 0
+                    })}
                   />
-                  {i === 0 && <div className={classes.thumbnailSelectedLine} />}
+                  {
+                    <div
+                      className={i === 0 ? classes.thumbnailSelectedLine : ''}
+                      amp-bind={`class=>${ampStateId}.${ampStateProperty} == ${i} ? '${
+                        classes.thumbnailSelectedLine
+                      }' : ''`}
+                    />
+                  }
                 </button>
               ))}
             </div>
