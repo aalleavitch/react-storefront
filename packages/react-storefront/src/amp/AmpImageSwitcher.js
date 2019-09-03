@@ -146,9 +146,21 @@ export default class AmpImageSwitcher extends Component {
     } = this.props
     const { id } = this
 
+    const pathname = '/p/1'
+
     return (
       <div className={classnames(className, classes.root, classes.rootImportant)}>
         <Helmet>
+          <script
+            async
+            custom-element="amp-list"
+            src="https://cdn.ampproject.org/v0/amp-list-0.1.js"
+          />
+          <script
+            async
+            custom-template="amp-mustache"
+            src="https://cdn.ampproject.org/v0/amp-mustache-0.2.js"
+          />
           <script
             async
             custom-element="amp-carousel"
@@ -161,18 +173,33 @@ export default class AmpImageSwitcher extends Component {
           />
         </Helmet>
         <div className={classes.carouselWrap}>
-          <amp-carousel
-            controls={arrows ? true : undefined}
-            id={id}
+          <amp-list
             layout="fill"
-            type={type}
-            amp-bind={`slide=>${ampStateId}.${ampStateProperty}`}
-            on={`slideChange:AMP.setState({ ${ampStateId}: { ${ampStateProperty}: event.index } })`}
+            id="list"
+            src={`${pathname}/images/cccccc.json`}
+            amp-bind={`src=>'${pathname}/images/' + moovAmpState.color.selected.id + '.json'`}
+            single-item
+            items="."
           >
-            {images.map(({ src, alt }) => (
-              <amp-img key={src} lightbox src={src} layout="fill" alt={alt} />
-            ))}
-          </amp-carousel>
+            <template type="amp-mustache" specName="default">
+              <amp-carousel
+                controls={arrows ? true : undefined}
+                id={id}
+                layout="fill"
+                type={type}
+                amp-bind={`slide=>${ampStateId}.${ampStateProperty}`}
+                on={`slideChange:AMP.setState({ ${ampStateId}: { ${ampStateProperty}: event.index } })`}
+              >
+                {`
+                  {{#images}}
+                    <amp-img lightbox src="{{.}}" layout="fill" alt="alt" />
+                  {{/images}}
+                `}
+                />
+              </amp-carousel>
+            </template>
+          </amp-list>
+
           {indicators && (
             <div className={classes.dots}>
               {images.map(({ src }, i) => (
