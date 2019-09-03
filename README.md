@@ -74,10 +74,14 @@ yarn release
 
 ## Changelog
 
-### 6.44.0
+### 6.45.0
 
 - Added `react-storefront/requestContext` for request scoped state storage access
 - Redirects from AMP to the PWA if @withAmp is not present on the main page component or if react-storefront-extensions/transformAmpHtml is not used.
+
+### 6.44.0
+
+- Adds a new `react-storefront-puppeteer` package to help developers write puppeteer tests for React Storefront apps and schedule smoke testing with Moovweb Control Center.
 
 ### 6.43.2
 
