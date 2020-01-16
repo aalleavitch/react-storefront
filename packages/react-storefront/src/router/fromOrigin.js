@@ -6,10 +6,6 @@
 import transformParams from './transformParams'
 import proxyUpstream from './proxyUpstream'
 
-async function fn(params, request, response) {
-  throw new Error('fromOrigin is only supported when running in the Moovweb XDN.')
-}
-
 export default function fromOrigin(backend = 'origin') {
   const type = 'fromOrigin'
   const config = {
@@ -32,10 +28,8 @@ export default function fromOrigin(backend = 'origin') {
         config: routePath => {
           config.proxy.rewrite_path_regex = transformParams(routePath, path)
           return config
-        },
-        fn
+        }
       }
-    },
-    fn
+    }
   }
 }
