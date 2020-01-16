@@ -47,7 +47,17 @@ export const styles = theme => ({
 @observer
 export default class NavTab extends Component {
   render() {
-    const { classes, state, url, prefetch, text, item, selected, tabProps } = this.props
+    const {
+      classes,
+      state,
+      url,
+      prefetch,
+      text,
+      item,
+      selected,
+      menuButtonRenderer,
+      tabProps
+    } = this.props
 
     return (
       <Track event="topNavClicked" item={item}>
@@ -72,6 +82,10 @@ export default class NavTab extends Component {
             {...tabProps}
           />
         </Link>
+        {menuButtonRenderer &&
+          (() => {
+            return menuButtonRenderer(item, this.getMenu)
+          })}
       </Track>
     )
   }
