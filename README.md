@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.76.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.75.2...v6.76.0)
+
+- Adds `inputProps` prop to `SearchDrawer`
+
 ### 6.75.2 [diff](https://github.com/moovweb/react-storefront/compare/v6.75.1...v6.75.2)
 
 - Fix regression where fromOrigin routes fail during local development with the message: "Error: fromOrigin is only supported when running in the Moovweb XDN."
