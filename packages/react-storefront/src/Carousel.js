@@ -5,7 +5,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import SwipeableViews from 'react-swipeable-views'
-import { autoPlay } from 'react-swipeable-views-utils'
+import { autoPlay, virtualize } from 'react-swipeable-views-utils'
 import withStyles from '@material-ui/core/styles/withStyles'
 import ChevronLeft from '@material-ui/icons/ChevronLeft'
 import ChevronRight from '@material-ui/icons/ChevronRight'
@@ -14,8 +14,6 @@ import { fade } from '@material-ui/core/styles/colorManipulator'
 import classnames from 'classnames'
 import { inject, observer } from 'mobx-react'
 import AmpCarousel from './amp/AmpCarousel'
-
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
 export const styles = theme => ({
   root: {
@@ -118,6 +116,11 @@ export default class Carousel extends Component {
     autoplay: PropTypes.bool,
 
     /**
+     * If true, scrolling past the last slide will cycle back to the first
+     */
+    infinite: PropTypes.bool,
+
+    /**
      * This is the auto play direction
      */
     direction: PropTypes.string,
@@ -142,6 +145,7 @@ export default class Carousel extends Component {
     arrows: true,
     indicators: false,
     autoplay: false,
+    infinite: false,
     direction: 'incremental',
     interval: 3000,
     inset: 0,
@@ -176,6 +180,13 @@ export default class Carousel extends Component {
     return <div key={index} className={classes} />
   }
 
+  mod(n, m) {
+    const q = n % m
+    return q < 0 ? q + m : q
+  }
+
+  slideRenderer = ({ key, index }) => {}
+
   render() {
     let {
       app,
@@ -186,6 +197,7 @@ export default class Carousel extends Component {
       style,
       children,
       autoplay,
+      infinite,
       interval,
       direction,
       inset,
@@ -198,7 +210,8 @@ export default class Carousel extends Component {
 
     const slideCount = React.Children.count(children)
 
-    const Tag = autoplay ? AutoPlaySwipeableViews : SwipeableViews
+    let Tag = infinite ? virtualize(SwipeableViews) : SwipeableViews
+    Tag = autoplay ? autoPlay(Tag) : Tag
 
     return (
       <div className={classnames(className, classes.root)} style={style}>
@@ -208,6 +221,7 @@ export default class Carousel extends Component {
             onChangeIndex={i => this.setState({ selectedIndex: i })}
             direction={direction}
             interval={interval}
+            slideRenderer={this.slideRenderer}
             slideStyle={{
               padding: `0 ${slideSpacing}px`
             }}
