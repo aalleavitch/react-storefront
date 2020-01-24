@@ -13,7 +13,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 import classnames from 'classnames'
 import { inject, observer } from 'mobx-react'
-import AmpCarousel from './amp/AmpCarousel'
+import AmpCarousel from './AmpCarousel'
 
 export const styles = theme => ({
   root: {
@@ -185,7 +185,11 @@ export default class Carousel extends Component {
     return q < 0 ? q + m : q
   }
 
-  slideRenderer = ({ key, index }) => {}
+  slideRenderer = ({ key, index }) => {
+    const { children } = this.props
+
+    return React.cloneElement(children[this.mod(index, children.length)], { key: key })
+  }
 
   render() {
     let {
@@ -216,25 +220,41 @@ export default class Carousel extends Component {
     return (
       <div className={classnames(className, classes.root)} style={style}>
         <div className={classes.swipeWrap}>
-          <Tag
-            index={selectedIndex}
-            onChangeIndex={i => this.setState({ selectedIndex: i })}
-            direction={direction}
-            interval={interval}
-            slideRenderer={this.slideRenderer}
-            slideStyle={{
-              padding: `0 ${slideSpacing}px`
-            }}
-            style={{
-              padding: `0 ${inset}px`
-            }}
-          >
-            {children}
-          </Tag>
+          {!infinite && (
+            <Tag
+              index={selectedIndex}
+              onChangeIndex={i => this.setState({ selectedIndex: i })}
+              direction={direction}
+              interval={interval}
+              slideStyle={{
+                padding: `0 ${slideSpacing}px`
+              }}
+              style={{
+                padding: `0 ${inset}px`
+              }}
+            >
+              {children}
+            </Tag>
+          )}
+          {infinite && (
+            <Tag
+              index={selectedIndex}
+              onChangeIndex={i => this.setState({ selectedIndex: i })}
+              direction={direction}
+              interval={interval}
+              slideRenderer={this.slideRenderer}
+              slideStyle={{
+                padding: `0 ${slideSpacing}px`
+              }}
+              style={{
+                padding: `0 ${inset}px`
+              }}
+            ></Tag>
+          )}
 
           {arrows && (
             <div className={classes.arrows}>
-              {selectedIndex !== 0 && (
+              {(selectedIndex !== 0 || infinite) && (
                 <IconButton
                   className={classnames(classes.arrow, classes.leftArrow)}
                   onClick={() => this.setState({ selectedIndex: selectedIndex - 1 })}
@@ -242,7 +262,7 @@ export default class Carousel extends Component {
                   <ChevronLeft classes={{ root: classes.icon }} />
                 </IconButton>
               )}
-              {selectedIndex !== slideCount - 1 && (
+              {(selectedIndex !== slideCount - 1 || infinite) && (
                 <IconButton
                   className={classnames(classes.arrow, classes.rightArrow)}
                   onClick={() => this.setState({ selectedIndex: selectedIndex + 1 })}
