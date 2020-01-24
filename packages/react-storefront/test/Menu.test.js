@@ -9,6 +9,7 @@ import { mount } from 'enzyme'
 import Provider from './TestProvider'
 import ExpandIcon from '@material-ui/icons/Add'
 import CollapseIcon from '@material-ui/icons/Remove'
+import Drawer from '@material-ui/core/Drawer'
 
 describe('Menu', () => {
   let app
@@ -445,6 +446,40 @@ describe('Menu', () => {
         .simulate('click')
 
       expect(global.fetch).toHaveBeenCalledWith('/lazy/items.json')
+    })
+  })
+
+  describe('onClose', () => {
+    it('should be called when the drawer closes', () => {
+      const handleClose = jest.fn()
+
+      const wrapper = mount(
+        <Provider app={app} history={{}}>
+          <Menu simple onClose={handleClose} />
+        </Provider>
+      )
+
+      wrapper
+        .find(Drawer)
+        .props()
+        .onClose()
+
+      expect(handleClose).toHaveBeenCalled()
+    })
+
+    it('should not be required', () => {
+      const wrapper = mount(
+        <Provider app={app} history={{}}>
+          <Menu simple />
+        </Provider>
+      )
+
+      expect(() => {
+        wrapper
+          .find(Drawer)
+          .props()
+          .onClose()
+      }).not.toThrowError()
     })
   })
 })

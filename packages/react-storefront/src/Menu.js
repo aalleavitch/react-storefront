@@ -343,7 +343,7 @@ export default class Menu extends Component {
           <Drawer
             variant={persistent ? 'persistent' : 'temporary'}
             open={menu.open || persistent}
-            onClose={menu.close}
+            onClose={this.handleClose}
             anchor={align}
             ModalProps={{
               keepMounted: true
@@ -367,5 +367,18 @@ export default class Menu extends Component {
         </Fragment>
       )
     }
+  }
+
+  handleClose = (...args) => {
+    const {
+      onClose,
+      app: { menu }
+    } = this.props
+
+    if (typeof onClose === 'function') {
+      onClose(...args)
+    }
+
+    menu.close()
   }
 }
