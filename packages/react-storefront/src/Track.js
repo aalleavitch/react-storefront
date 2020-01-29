@@ -58,7 +58,13 @@ export default class Track extends Component {
     /**
      * Additional data to send when tracking events in AMP.
      */
-    ampData: PropTypes.object
+    ampData: PropTypes.object,
+
+    /**
+     * Time in ms to delay firing the event(s). Use when you want to avoid costly analytics
+     * main thread work for some period after the configured event(s).
+     */
+    delay: PropTypes.number
   }
 
   static defaultProps = {
@@ -69,7 +75,7 @@ export default class Track extends Component {
 
   componentWillMount() {
     if (this.props.app.amp) {
-      const { event, trigger, app, children, onSuccess, ...data } = this.props
+      const { event, trigger, app, children, onSuccess, delay, ...data } = this.props
       this.createAmpTriggers(data)
     }
   }
@@ -84,12 +90,19 @@ export default class Track extends Component {
    * @param {String} e The event to fire
    */
   fireEvent(e) {
-    const { event, trigger, app, children, onSuccess, ampData, ...data } = this.props
+    const { event, trigger, app, children, onSuccess, ampData, delay, ...data } = this.props
 
-    setImmediate(async () => {
-      await analytics.fire(e, data)
-      onSuccess()
-    })
+    if (delay) {
+      setTimeout(async () => {
+        await analytics.fire(e, data)
+        onSuccess()
+      }, delay)
+    } else {
+      setImmediate(async () => {
+        await analytics.fire(e, data)
+        onSuccess()
+      })
+    }
   }
 
   createTriggerHandler(el, trigger, event) {
