@@ -3,13 +3,13 @@
  * Copyright © 2017-2018 Moov Corporation.  All rights reserved.
  */
 import React, { Component } from 'react'
-import Track from './Track'
-import Link from './Link'
+import Track from 'react-storefront/Track'
+import Link from 'react-storefront/Link'
 import Tab from '@material-ui/core/Tab'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { observer } from 'mobx-react'
 import classnames from 'classnames'
-import { lazyState } from './utils/state'
+import { lazyState } from 'react-storefront/utils/state'
 
 export const styles = theme => ({
   root: {
@@ -40,6 +40,7 @@ export const styles = theme => ({
   menuItem: {
     padding: `1em ${theme.margins.container}px`
   },
+  tabWrapper: {},
   selected: {}
 })
 
@@ -61,31 +62,30 @@ export default class NavTab extends Component {
 
     return (
       <Track event="topNavClicked" item={item}>
-        <Link
-          state={lazyState(state)}
-          className={classnames(classes.link, { [classes.selected]: selected })}
-          to={url}
-          prefetch={prefetch}
-          onClick={this.props.onClick}
-          anchorProps={{
-            onMouseEnter: this.onMouseEnter,
-            onMouseLeave: this.props.onMouseLeave,
-            'data-th': 'nav'
-          }}
-        >
-          <Tab
-            className={classes.root}
-            label={text}
-            classes={{
-              label: classes.label
+        <div className={classes.tabWrapper}>
+          <Link
+            state={lazyState(state)}
+            className={classnames(classes.link, { [classes.selected]: selected })}
+            to={url}
+            prefetch={prefetch}
+            onClick={this.props.onClick}
+            anchorProps={{
+              onMouseEnter: this.onMouseEnter,
+              onMouseLeave: this.props.onMouseLeave,
+              'data-th': 'nav'
             }}
-            {...tabProps}
-          />
-        </Link>
-        {menuButtonRenderer &&
-          (() => {
-            return menuButtonRenderer(item, this.getMenu)
-          })}
+          >
+            <Tab
+              className={classes.root}
+              label={text}
+              classes={{
+                label: classes.label
+              }}
+              {...tabProps}
+            />
+          </Link>
+          {menuButtonRenderer && menuButtonRenderer(this.getMenu())}
+        </div>
       </Track>
     )
   }
