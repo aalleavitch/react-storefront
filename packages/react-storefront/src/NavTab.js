@@ -3,13 +3,13 @@
  * Copyright © 2017-2018 Moov Corporation.  All rights reserved.
  */
 import React, { Component } from 'react'
-import Track from 'react-storefront/Track'
-import Link from 'react-storefront/Link'
+import Track from './Track'
+import Link from './Link'
 import Tab from '@material-ui/core/Tab'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { observer } from 'mobx-react'
 import classnames from 'classnames'
-import { lazyState } from 'react-storefront/utils/state'
+import { lazyState } from './utils/state'
 
 export const styles = theme => ({
   root: {
