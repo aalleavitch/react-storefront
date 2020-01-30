@@ -53,8 +53,10 @@ yarn watch
 Then, in your app's root directory run:
 
 ```
-npm link react-storefront && npm link babel-plugin-react-storefront && npm link react-storefront-moov-xdn && npm link react-storefront-middleware
+npm run dev:link
 ```
+
+You need to rerun the above every time you run `npm install` because npm overwrites linked modules when new modules are installed.
 
 ### Setup prettier with Visual Studio Code
 
@@ -73,6 +75,10 @@ yarn release
 ```
 
 ## Changelog
+
+### 6.77.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.76.1...v6.77.0)
+
+- Added `Track` property to delay firing analytics events
 
 ### 6.76.1 [diff](https://github.com/moovweb/react-storefront/compare/v6.76.0...v6.76.1)
 
