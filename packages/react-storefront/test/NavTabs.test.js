@@ -163,4 +163,32 @@ describe('NavTabs', () => {
       )
     ).toMatchSnapshot()
   })
+
+  
+  it('should add a menu button to the tab defined by menuButtonRenderer', () => {
+    const renderMenuButton = (menu) => {
+      return (
+        <button
+          id={'#menu-button'}
+          onClick={() => menu}
+        >
+        </button>
+      )
+    }
+
+    const component = (
+      <Provider app={app}>
+        <NavTab menuButtonRenderer={renderMenuButton}>
+          {'menu'}
+        </NavTab>
+      </Provider>
+    )
+
+    expect(
+      mount(component)
+        .find('#menu-button')
+        .at(0)
+        .simulate('click')
+    ).toHaveReturnedWith('menu')
+  })
 })
