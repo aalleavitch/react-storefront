@@ -247,7 +247,12 @@ describe('fetchWithCookies', () => {
 
   beforeEach(() => {
     global.env = env = {
-      cookie: 'JSESSIONID=EB9FC0F82486EF5F36C7851A56BB3CB2'
+      cookie: 'JSESSIONID=EB9FC0F82486EF5F36C7851A56BB3CB2',
+      rsf_request: {
+        cookies: {
+          JSESSIONID: 'EB9FC0F82486EF5F36C7851A56BB3CB2'
+        }
+      }
     }
   })
 
@@ -274,6 +279,43 @@ describe('fetchWithCookies', () => {
     env.shouldSendCookies = false
     const result = await fetchWithCookies('https://api.com/posts/1').then(res => res.json())
     expect(result).toEqual({ cookies: false })
+  })
+
+  it('should add moov_ cookies if "shouldSendCookies" is false', async () => {
+    env.rsf_request.cookies.moov_bucket = '10'
+    env.rsf_request.cookies.moov_foo = 'bar'
+    env.rsf_request.cookies.foo = 'bar'
+
+    nock('https://api.com', { reqheaders: { cookie: 'moov_bucket=10; moov_foo=bar' } })
+      .get('/posts/1')
+      .reply(200, { cookies: false })
+
+    env.shouldSendCookies = false
+    const result = await fetchWithCookies('https://api.com/posts/1').then(res => res.json())
+    expect(result).toEqual({ cookies: false })
+  })
+
+  it('should add moov_ cookies if "shouldSendCookies" is an array', async () => {
+    env.rsf_request.cookies.moov_bucket = '10'
+    env.rsf_request.cookies.moov_foo = 'bar'
+    env.rsf_request.cookies.foo = 'bar'
+    env.rsf_request.cookies.dontsend = 'xxx'
+
+    nock('https://api.com', {
+      reqheaders: {
+        cookie: 'foo=bar; moov_bucket=10; moov_foo=bar'
+      }
+    })
+      .get('/posts/1')
+      .reply(200, {
+        cookies: false
+      })
+
+    env.shouldSendCookies = ['foo']
+    const result = await fetchWithCookies('https://api.com/posts/1').then(res => res.json())
+    expect(result).toEqual({
+      cookies: false
+    })
   })
 
   it('should not add a cookie if env.cookie is undefined', async () => {

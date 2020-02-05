@@ -8,6 +8,7 @@ import analytics, { configureAnalytics, activate } from './analytics'
 import { Provider, inject } from 'mobx-react'
 import ttiPolyfill from 'tti-polyfill'
 import { getCookie } from './utils/cookie'
+import qs from 'qs'
 
 /**
  * Use this component to register your analytics targets.
@@ -78,12 +79,15 @@ export default class AnalyticsProvider extends Component {
   }
 
   /**
-   * Returns true unless a rsf_disable_analytics cookie is present and set to "true".
-   * This cookie allows us to turn off analytics during smoke testing, crawling, etc...
+   * Returns true unless a rsf_disable_analytics cookie is present and set to "true"
+   * or _rsf_analytics query parameter equals 0.
+   *
+   * This allows us to turn off analytics during smoke testing, crawling, etc...
    * @return {Boolean}
    */
   anayticsEnabled() {
-    return getCookie('rsf_disable_analytics') !== 'true'
+    const { _rsf_analytics } = qs.parse(window.location.search, { ignoreQueryPrefix: true })
+    return getCookie('rsf_disable_analytics') !== 'true' && _rsf_analytics !== '0'
   }
 
   async componentDidMount() {
@@ -110,7 +114,9 @@ export default class AnalyticsProvider extends Component {
 
         activate()
       } else {
-        console.log('Skipping analytics because a rsf_disable_analytics=true cookie is present.')
+        console.log(
+          'Skipping analytics because a rsf_disable_analytics=true cookie is present or _rsf_analytics query parameter is 0.'
+        )
       }
     }
   }

@@ -121,7 +121,7 @@ exports[`ImageSwitcher should render AmpImageSwitcher when amp=true 1`] = `
                               <NullComponent defer={true} encodeSpecialCharacters={true} script={{...}} />
                             </SideEffect(NullComponent)>
                           </HelmetWrapper>
-                          <amp-state id="moovAmpState" amp-bind="src=>moovAmpState.colorInteracted ? \\'/images/\\' + moovAmpState.color.selected.id + \\'.json\\' : null" />
+                          <amp-state id="moovAmpState" amp-bind="src=>moovAmpState.colorInteracted ? \\'/images//\\' + moovAmpState.color.selected.id + \\'.json\\' : null" />
                           <div className="RSFAmpImageSwitcher-carouselWrap-286">
                             <BeforeInteracted>
                               <div amp-bind="class=>moovAmpState.colorInteracted ? \\'RSFAmpImageSwitcher-hidden-295\\' : \\'\\'">
@@ -210,7 +210,7 @@ exports[`ImageSwitcher should render AmpImageSwitcher without product colors 1`]
                               <NullComponent defer={true} encodeSpecialCharacters={true} script={{...}} />
                             </SideEffect(NullComponent)>
                           </HelmetWrapper>
-                          <amp-state id="moovAmpState" amp-bind="src=>moovAmpState.colorInteracted ? \\'/images/\\' + moovAmpState.color.selected.id + \\'.json\\' : null" />
+                          <amp-state id="moovAmpState" amp-bind="src=>moovAmpState.colorInteracted ? \\'/images//\\' + moovAmpState.color.selected.id + \\'.json\\' : null" />
                           <div className="RSFAmpImageSwitcher-carouselWrap-326">
                             <BeforeInteracted>
                               <div amp-bind="class=>moovAmpState.colorInteracted ? \\'RSFAmpImageSwitcher-hidden-335\\' : \\'\\'">
