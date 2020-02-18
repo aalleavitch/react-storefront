@@ -8,7 +8,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
-import AmpState from 'react-storefront/amp/AmpState'
+import AmpState from './AmpState'
 
 export const styles = theme => ({
   root: {},

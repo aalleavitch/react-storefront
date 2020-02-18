@@ -13,7 +13,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 import classnames from 'classnames'
 import { inject, observer } from 'mobx-react'
-import AmpCarousel from './AmpCarousel'
+import AmpCarousel from './amp/AmpCarousel'
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 const VirtualizeSwipeableViews = virtualize(SwipeableViews)
