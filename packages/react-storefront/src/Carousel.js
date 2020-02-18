@@ -15,6 +15,10 @@ import classnames from 'classnames'
 import { inject, observer } from 'mobx-react'
 import AmpCarousel from './AmpCarousel'
 
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
+const VirtualizeSwipeableViews = virtualize(SwipeableViews)
+const AutoPlayVirtualizeSwipeableViews = autoPlay(VirtualizeSwipeableViews)
+
 export const styles = theme => ({
   root: {
     display: 'flex',
@@ -116,11 +120,6 @@ export default class Carousel extends Component {
     autoplay: PropTypes.bool,
 
     /**
-     * If true, scrolling past the last slide will cycle back to the first
-     */
-    infinite: PropTypes.bool,
-
-    /**
      * This is the auto play direction
      */
     direction: PropTypes.string,
@@ -131,6 +130,21 @@ export default class Carousel extends Component {
     interval: PropTypes.number,
 
     /**
+     * If true, scrolling past the last slide will cycle back to the first
+     */
+    infinite: PropTypes.bool,
+
+    /**
+     * If infinite is enabled, this prop can be used to override the slideRenderer
+     */
+    slideRenderer: PropTypes.func,
+
+    /**
+     * If infinite is enabled, the number of slides to show for each index
+     */
+    slidesToShow: PropTypes.number,
+
+    /**
      * Amount of pixels to pad the slide container
      */
     inset: PropTypes.number,
@@ -138,24 +152,33 @@ export default class Carousel extends Component {
     /**
      * Amount of pixels of spacing between each slide
      */
-    slideSpacing: PropTypes.number
+    slideSpacing: PropTypes.number,
+
+    /**
+     * Additional props to be passed on to the react-swipeable-views component
+     */
+    swipeableViewsProps: PropTypes.object
   }
 
   static defaultProps = {
     arrows: true,
     indicators: false,
     autoplay: false,
-    infinite: false,
     direction: 'incremental',
     interval: 3000,
+    infinite: false,
+    slideRenderer: null,
+    slidesToShow: 1,
     inset: 0,
-    slideSpacing: 0
+    slideSpacing: 0,
+    swipeabeViewsProps: {}
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const nextState = {
       selectedIndex:
-        nextProps.selectedIndex != null ? nextProps.selectedIndex : prevState.selectedIndex || 0
+        nextProps.selectedIndex != null ? nextProps.selectedIndex : prevState.selectedIndex || 0,
+      maxIndex: Math.ceil(React.Children.count(nextProps.children) / nextProps.slidesToShow)
     }
 
     if (prevState.selectedIndex == null) {
@@ -174,8 +197,9 @@ export default class Carousel extends Component {
   }
 
   renderDot(index) {
+    const { selectedIndex, maxIndex } = this.state
     const classes = classnames(this.props.classes.dot, {
-      [this.props.classes.dotSelected]: index === this.state.selectedIndex
+      [this.props.classes.dotSelected]: index === this.mod(selectedIndex, maxIndex)
     })
     return <div key={index} className={classes} />
   }
@@ -186,9 +210,22 @@ export default class Carousel extends Component {
   }
 
   slideRenderer = ({ key, index }) => {
-    const { children } = this.props
+    const { children, slidesToShow } = this.props
+    const { maxIndex } = this.state
+    const slideCount = React.Children.count(children)
 
-    return React.cloneElement(children[this.mod(index, children.length)], { key: key })
+    let baseindex = this.mod(index, maxIndex) * slidesToShow
+    baseindex = baseindex + slidesToShow >= slideCount ? slideCount - slidesToShow : baseindex
+    let slide = []
+    for (let i = 0; i < slidesToShow; i++) {
+      slide.push(
+        React.cloneElement(children[baseindex + i], {
+          style: { width: 100 / slidesToShow + '%', display: 'inline-block' }
+        })
+      )
+    }
+
+    return <div key={key}>{slide}</div>
   }
 
   render() {
@@ -202,10 +239,13 @@ export default class Carousel extends Component {
       children,
       autoplay,
       infinite,
+      slideRenderer,
+      slidesToShow,
       interval,
       direction,
       inset,
-      slideSpacing
+      slideSpacing,
+      swipeableViewsProps
     } = this.props
 
     if (app.amp) return <AmpCarousel {...this.props} />
@@ -214,8 +254,9 @@ export default class Carousel extends Component {
 
     const slideCount = React.Children.count(children)
 
-    let Tag = infinite ? virtualize(SwipeableViews) : SwipeableViews
-    Tag = autoplay ? autoPlay(Tag) : Tag
+    let Tag = infinite ? VirtualizeSwipeableViews : SwipeableViews
+    Tag = autoplay ? AutoPlaySwipeableViews : Tag
+    Tag = infinite && autoplay ? AutoPlayVirtualizeSwipeableViews : Tag
 
     return (
       <div className={classnames(className, classes.root)} style={style}>
@@ -232,6 +273,7 @@ export default class Carousel extends Component {
               style={{
                 padding: `0 ${inset}px`
               }}
+              {...swipeableViewsProps}
             >
               {children}
             </Tag>
@@ -242,17 +284,18 @@ export default class Carousel extends Component {
               onChangeIndex={i => this.setState({ selectedIndex: i })}
               direction={direction}
               interval={interval}
-              slideRenderer={this.slideRenderer}
+              slideRenderer={infinite && (slideRenderer || this.slideRenderer)}
               slideStyle={{
                 padding: `0 ${slideSpacing}px`
               }}
               style={{
                 padding: `0 ${inset}px`
               }}
-            ></Tag>
+              {...swipeableViewsProps}
+            />
           )}
 
-          {arrows && (
+          {arrows && slideCount > slidesToShow && (
             <div className={classes.arrows}>
               {(selectedIndex !== 0 || infinite) && (
                 <IconButton
@@ -273,9 +316,9 @@ export default class Carousel extends Component {
             </div>
           )}
 
-          {indicators && (
+          {indicators && slideCount > slidesToShow && (
             <div className={classes.dots}>
-              {Array(slideCount)
+              {Array(Math.ceil(slideCount / slidesToShow))
                 .fill(0)
                 .map((_, index) => this.renderDot(index))}
             </div>
