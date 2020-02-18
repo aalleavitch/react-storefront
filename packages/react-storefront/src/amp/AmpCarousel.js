@@ -68,7 +68,7 @@ export default class AmpCarousel extends Component {
     /**
      * Width on carousel container, defaults to "auto"
      */
-    height: PropTypes.number,
+    width: PropTypes.number,
 
     /**
      * AMP layout type, defaults to "fixed-height"
