@@ -3,13 +3,12 @@
  * Copyright © 2017-2018 Moov Corporation.  All rights reserved.
  */
 
-// @create-index
+// @create-index {"ignore":["MenuModel"]}
 
 export { default as AppModelBase } from './AppModelBase.js';
 export { default as CartModelBase } from './CartModelBase.js';
 export { default as CategoryModelBase } from './CategoryModelBase.js';
 export { default as MediaTypeModel } from './MediaTypeModel.js';
-export { default as MenuModel } from './MenuModel.js';
 export { default as OptionModelBase } from './OptionModelBase.js';
 export { default as ProductModelBase } from './ProductModelBase.js';
 export { default as SearchModelBase } from './SearchModelBase.js';

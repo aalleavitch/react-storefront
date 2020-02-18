@@ -76,6 +76,10 @@ yarn release
 
 ## Changelog
 
+### 6.78.1 [diff](https://github.com/moovweb/react-storefront/compare/v6.78.0...v6.78.1)
+
+- Removed broken indexes from root react-storefront module
+
 ### 6.78.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.77.0...v6.78.0)
 
 - moov\_\* cookies are now always sent when using fetch in an API handler. This ensures that when an API handler makes a request to the PWA under an A/B test, the response will come from the same mode.

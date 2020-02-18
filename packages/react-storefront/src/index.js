@@ -3,7 +3,7 @@
  * Copyright © 2017-2018 Moov Corporation.  All rights reserved.
  */
 
-// @create-index {"ignore":["platform","registerServiceWorker","amp","launchClient","stats"]}
+// @create-index {"ignore":["platform","registerServiceWorker","amp","launchClient","stats","renderers","utils","Server","Skeleton","SocialShareButtons","analytics","cache","createTheme","environment","fetch","fetchLatest","format","icons","imageService","menu","model","persist","personal","requestContext","router"]}
 
 export { default as Accordion } from './Accordion.js';
 export { default as ActionButton } from './ActionButton.js';
@@ -59,10 +59,7 @@ export { default as SearchButton } from './SearchButton.js';
 export { default as SearchDrawer } from './SearchDrawer.js';
 export { default as SearchField } from './SearchField.js';
 export { default as SearchPopup } from './SearchPopup.js';
-export { default as Server } from './Server.js';
 export { default as ShowMore } from './ShowMore.js';
-export { default as Skeleton } from './Skeleton.js';
-export { default as SocialShareButtons } from './SocialShareButtons.js';
 export { default as Sort } from './Sort.js';
 export { default as SortButton } from './SortButton.js';
 export { default as Spacer } from './Spacer.js';
@@ -73,22 +70,5 @@ export { default as ToolbarButton } from './ToolbarButton.js';
 export { default as Track } from './Track.js';
 export { default as UpdateNotification } from './UpdateNotification.js';
 export { default as Video } from './Video.js';
-export { default as analytics } from './analytics.js';
-export { default as cache } from './cache.js';
-export { default as createTheme } from './createTheme.js';
-export { default as environment } from './environment.js';
-export { default as fetch } from './fetch.js';
-export { default as fetchLatest } from './fetchLatest.js';
-export { default as format } from './format.js';
-export { default as icons } from './icons';
-export { default as imageService } from './imageService.js';
-export { default as menu } from './menu';
-export { default as model } from './model';
-export { default as persist } from './persist.js';
-export { default as personal } from './personal';
-export { default as renderers } from './renderers.js';
-export { default as requestContext } from './requestContext.js';
-export { default as router } from './router';
-export { default as utils } from './utils';
 export { default as withStyleProps } from './withStyleProps.js';
 
