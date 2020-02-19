@@ -76,6 +76,11 @@ yarn release
 
 ## Changelog
 
+### 6.80.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.79.0...v6.80.0)
+
+- Added an infinite scroll feature to the Carousel component, including `infinite`, `slideRenderer`, `slidesToShow`, and `swipeableViewsProps` props
+- Added `width` prop to AmpCarousel component
+
 ### 6.79.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.78.1...v6.79.0)
 
 - Updated webpack plugin which caused copy error in client bundle
