@@ -66,7 +66,6 @@ import PaginationContainer from './PaginationContainer'
 import Pets from '@material-ui/icons/Pets'
 import ThumbUp from '@material-ui/icons/ThumbUp'
 import ThumbUpOutlined from '@material-ui/icons/ThumbUpOutlined'
-import Button from '@material-ui/core/Button'
 
 setAddon(JSXAddon)
 
