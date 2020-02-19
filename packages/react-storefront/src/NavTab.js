@@ -40,6 +40,7 @@ export const styles = theme => ({
   menuItem: {
     padding: `1em ${theme.margins.container}px`
   },
+  tabWrapper: {},
   selected: {}
 })
 
@@ -47,31 +48,44 @@ export const styles = theme => ({
 @observer
 export default class NavTab extends Component {
   render() {
-    const { classes, state, url, prefetch, text, item, selected, tabProps } = this.props
+    const {
+      classes,
+      state,
+      url,
+      prefetch,
+      text,
+      item,
+      selected,
+      menuButtonRenderer,
+      tabProps
+    } = this.props
 
     return (
       <Track event="topNavClicked" item={item}>
-        <Link
-          state={lazyState(state)}
-          className={classnames(classes.link, { [classes.selected]: selected })}
-          to={url}
-          prefetch={prefetch}
-          onClick={this.props.onClick}
-          anchorProps={{
-            onMouseEnter: this.onMouseEnter,
-            onMouseLeave: this.props.onMouseLeave,
-            'data-th': 'nav'
-          }}
-        >
-          <Tab
-            className={classes.root}
-            label={text}
-            classes={{
-              label: classes.label
+        <div className={classes.tabWrapper}>
+          <Link
+            state={lazyState(state)}
+            className={classnames(classes.link, { [classes.selected]: selected })}
+            to={url}
+            prefetch={prefetch}
+            onClick={this.props.onClick}
+            anchorProps={{
+              onMouseEnter: this.onMouseEnter,
+              onMouseLeave: this.props.onMouseLeave,
+              'data-th': 'nav'
             }}
-            {...tabProps}
-          />
-        </Link>
+          >
+            <Tab
+              className={classes.root}
+              label={text}
+              classes={{
+                label: classes.label
+              }}
+              {...tabProps}
+            />
+          </Link>
+          {menuButtonRenderer && menuButtonRenderer(this.getMenu())}
+        </div>
       </Track>
     )
   }
