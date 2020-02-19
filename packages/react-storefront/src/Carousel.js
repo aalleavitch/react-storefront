@@ -220,7 +220,8 @@ export default class Carousel extends Component {
     for (let i = 0; i < slidesToShow; i++) {
       slide.push(
         React.cloneElement(children[baseindex + i], {
-          style: { width: 100 / slidesToShow + '%', display: 'inline-block' }
+          style: { width: 100 / slidesToShow + '%', display: 'inline-block' },
+          key: key + '_' + i
         })
       )
     }
